@@ -16,3 +16,4 @@ services:
   test.App\Service\CalculateQuarterDeclaration: '@App\Service\CalculateQuarterDeclaration'
   test.App\Util\CurrencyFormatter: '@App\Util\CurrencyFormatter'
   test.App\Util\QuarterDate: '@App\Util\QuarterDate'
+  test.App\Manager\TransactionManager: '@App\Manager\TransactionManager'

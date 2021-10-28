@@ -42,7 +42,11 @@ class SummaryQuarter implements SummaryQuarterInterface
         $debit = 0;
         foreach ($this->transactions as $transaction) {
             if ($transaction->getType() === Transaction::TYPE_DEBIT) {
-                $debit += $transaction->getPrice();
+                if ($transaction->getPrice() < 50000) {
+                    $debit += $transaction->getPrice();
+                } else {
+                    $debit += $transaction->getPrice() / $transaction->getSlices();
+                }
             }
         }
 
@@ -51,5 +55,10 @@ class SummaryQuarter implements SummaryQuarterInterface
 
     public function getDetailDebit()
     {
+    }
+
+    public function summaryByQuarterAndYear(int $quarter, int $year)
+    {
+
     }
 }

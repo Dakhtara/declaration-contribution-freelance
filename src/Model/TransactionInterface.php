@@ -13,4 +13,6 @@ interface TransactionInterface
     public function getPrice(): int;
 
     public function getDate(): \DateTime;
+
+    public function getSlices(): ?int;
 }

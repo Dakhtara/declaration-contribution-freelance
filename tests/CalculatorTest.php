@@ -2,10 +2,13 @@
 
 namespace App\Tests;
 
+use App\Entity\SplittedTransaction;
 use App\Entity\Transaction;
+use App\Manager\TransactionManager;
 use App\Service\CalculateQuarterDeclaration;
 use App\SummaryQuarter\SummaryQuarter;
 use App\Util\CurrencyFormatter;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CalculatorTest extends KernelTestCase
@@ -15,8 +18,6 @@ class CalculatorTest extends KernelTestCase
         $kernel = self::bootKernel();
 
         $this->assertSame('test', $kernel->getEnvironment());
-        //$routerService = self::$container->get('router');
-        //$myCustomService = self::$container->get(CustomService::class);
     }
 
     public function testCalculateQuarterMock(): void
@@ -31,9 +32,9 @@ class CalculatorTest extends KernelTestCase
         ];
 
         $mock->method('calculateForQuarter')
-            ->willReturn(new SummaryQuarter($transactions));
+            ->willReturn(new SummaryQuarter($transactions, 4, 2021));
 
-        $this->assertInstanceOf(SummaryQuarter::class, $mock->calculateForQuarter($transactions, new \DateTime()));
+        $this->assertInstanceOf(SummaryQuarter::class, $mock->calculateForQuarter(4, 2021));
     }
 
     public function testCalculateQuarter(): void
@@ -41,12 +42,8 @@ class CalculatorTest extends KernelTestCase
         $container = static::getContainer();
 
         $calculateQuarterDeclaration = $container->get('test.' . CalculateQuarterDeclaration::class);
-        $transactions = [
-            (new Transaction())->setType(Transaction::TYPE_DEBIT)->setPrice(20000)->setDateTime(new \DateTime('-2 days')),
-            (new Transaction())->setType(Transaction::TYPE_CREDIT)->setPrice(70000)->setDateTime(new \DateTime('-1 days')),
-            (new Transaction())->setType(Transaction::TYPE_DEBIT)->setPrice(60000)->setDateTime(new \DateTime('-1 days'))->setSlices(3)
-        ];
-        $this->assertSame(30000, $calculateQuarterDeclaration->calculate($transactions));
+
+        $this->assertSame(30000, $calculateQuarterDeclaration->calculateForQuarter(4, 2021)->getAmount());
     }
 
     public function testCurrencyFormatter(): void

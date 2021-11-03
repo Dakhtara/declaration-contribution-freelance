@@ -14,12 +14,14 @@ class TransactionFixtures extends Fixture
             [
                 'id' => 1,
                 'type' => Transaction::TYPE_DEBIT,
+                'label' => 'Achat Apple Pencil',
                 'price' => 20000,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '28/10/2021 13:39:00'),
                 'slices' => null,
             ],
             [
                 'id' => 2,
+                'label' => 'Virement ID City',
                 'type' => Transaction::TYPE_CREDIT,
                 'price' => 70000,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '27/10/2021 14:50:00'),
@@ -27,6 +29,7 @@ class TransactionFixtures extends Fixture
             ],
             [
                 'id' => 3,
+                'label' => 'Achat Ipad Air',
                 'type' => Transaction::TYPE_DEBIT,
                 'price' => 60000,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '28/10/2021 10:25:00'),
@@ -37,6 +40,7 @@ class TransactionFixtures extends Fixture
         foreach ($transactions as $transaction) {
             $entityTransaction = new Transaction();
             $entityTransaction->setType($transaction['type'])
+                ->setLabel($transaction['label'])
                 ->setPrice($transaction['price'])
                 ->setDateTime($transaction['datetime'])
                 ->setSlices($transaction['slices']);

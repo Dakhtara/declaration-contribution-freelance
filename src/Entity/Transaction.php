@@ -28,6 +28,9 @@ class Transaction implements TransactionInterface
     #[Column(name: 'type', type: 'string', length: 30)]
     private string $type;
 
+    #[Column(name: 'label', type: 'string', length: 255)]
+    private string $label;
+
     #[Column(name: 'price', type: 'integer')]
     private int $price;
 
@@ -35,7 +38,7 @@ class Transaction implements TransactionInterface
     private \DateTimeInterface $dateTime;
 
     #[Column(name: 'slices', type: 'integer', nullable: true)]
-    private ?int $slices;
+    private ?int $slices = null;
 
     /**
      * @var Collection|SplittedTransactionInterface[]
@@ -63,7 +66,7 @@ class Transaction implements TransactionInterface
         return $this->price;
     }
 
-    public function getDate(): \DateTime
+    public function getDate(): \DateTimeInterface
     {
         return $this->dateTime;
     }
@@ -76,7 +79,7 @@ class Transaction implements TransactionInterface
     /**
      * @return SplittedTransactionInterface[]|array
      */
-    public function getSplittedTransaction(): array
+    public function getSplittedTransaction(): Collection
     {
         return $this->splittedTransaction;
     }
@@ -115,6 +118,26 @@ class Transaction implements TransactionInterface
     public function setSplittedTransaction(Collection $splittedTransaction): self
     {
         $this->splittedTransaction = $splittedTransaction;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string $label
+     *
+     * @return $this
+     */
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
 
         return $this;
     }

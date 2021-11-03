@@ -2,24 +2,20 @@
 
 namespace App\Service;
 
+use App\Manager\TransactionManager;
 use App\Model\SummaryQuarterInterface;
-use App\Model\TransactionInterface;
 use App\SummaryQuarter\SummaryQuarter;
 
 class CalculateQuarterDeclaration
 {
-
-    /**
-     * @param TransactionInterface[] $transactions
-     */
-    public function calculate(array $transactions)
+    public function __construct(private TransactionManager $transactionManager)
     {
-        $summaryQuarter = new SummaryQuarter($transactions);
-
-        return $summaryQuarter->getAmount();
     }
 
-    public function calculateForQuarter(array $transactions, \DateTimeInterface $dateTime): SummaryQuarterInterface
+    public function calculateForQuarter(int $quarter, int $year): SummaryQuarterInterface
     {
+        $transactions = $this->transactionManager->getByQuarterAndYear($quarter, $year);
+
+        return new SummaryQuarter($transactions, $quarter, $year);
     }
 }

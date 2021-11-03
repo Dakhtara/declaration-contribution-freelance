@@ -17,8 +17,13 @@ class TransactionRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t');
 
-        $qb->where($qb->expr()->between('t.dateTime', ':start', ':end'))
-            ->setParameters( ['start' => $start, 'end' => $end]);
+        $qb->leftJoin('t.splittedTransaction', 'st');
+        //We fetch in root entity
+        $qb->where($qb->expr()->between('t.dateTime', ':start', ':end'));
+        //Or in splittedTransaction
+        $qb->orWhere($qb->expr()->between('st.date', ':start', ':end'));
+
+        $qb->setParameters(['start' => $start, 'end' => $end]);
 
         return $qb->getQuery()->getResult();
     }

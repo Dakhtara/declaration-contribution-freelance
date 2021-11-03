@@ -43,7 +43,7 @@ class Transaction implements TransactionInterface
     /**
      * @var Collection|SplittedTransactionInterface[]
      */
-    #[OneToMany(targetEntity: SplittedTransaction::class, mappedBy: 'transaction')]
+    #[OneToMany(targetEntity: SplittedTransaction::class, mappedBy: 'transaction', orphanRemoval: true, cascade: ['persist'])]
     private $splittedTransaction;
 
     public function __construct()
@@ -138,6 +138,26 @@ class Transaction implements TransactionInterface
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function addSplittedTransaction(SplittedTransactionInterface $splittedTransaction): self
+    {
+        if (!$this->splittedTransaction->contains($splittedTransaction)) {
+            $this->splittedTransaction->add($splittedTransaction);
+            $splittedTransaction->setTransaction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSplittedTransaction(SplittedTransactionInterface $splittedTransaction): self
+    {
+        if ($this->splittedTransaction->contains($splittedTransaction)) {
+            $this->splittedTransaction->removeElement($splittedTransaction);
+            $splittedTransaction->setTransaction(null);
+        }
 
         return $this;
     }

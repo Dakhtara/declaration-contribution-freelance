@@ -2,13 +2,10 @@
 
 namespace App\Tests;
 
-use App\Entity\SplittedTransaction;
 use App\Entity\Transaction;
-use App\Manager\TransactionManager;
 use App\Service\CalculateQuarterDeclaration;
 use App\SummaryQuarter\SummaryQuarter;
 use App\Util\CurrencyFormatter;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CalculatorTest extends KernelTestCase

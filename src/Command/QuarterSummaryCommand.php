@@ -49,7 +49,7 @@ class QuarterSummaryCommand extends Command
         }
 
         $io->table(
-            ['Libellé', 'Date', 'Prix'],
+            ['Libellé', 'Date', 'Montant'],
             $creditTransaction
         );
 
@@ -73,7 +73,7 @@ class QuarterSummaryCommand extends Command
         }
 
         $io->table(
-            ['Libellé', 'Date', 'Prix'],
+            ['Libellé', 'Date', 'Montant'],
             $debitTransaction
         );
 

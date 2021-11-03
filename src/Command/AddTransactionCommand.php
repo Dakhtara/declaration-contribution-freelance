@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Transaction;
 use App\Manager\TransactionManager;
+use App\Util\CurrencyFormatter;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -61,6 +62,9 @@ class AddTransactionCommand extends Command
 
         $this->transactionManager->save($transaction);
 
+        $currencyFormatter = new CurrencyFormatter();
+        $io->success(sprintf("Transaction enregistrée avec succès pour %s au %s pour %s", $transaction->getLabel(), $transaction->getDate()->format('d/m/Y'),
+            $currencyFormatter->toCurrency($transaction->getPrice())));
         return Command::SUCCESS;
     }
 }

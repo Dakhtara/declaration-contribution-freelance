@@ -18,5 +18,6 @@ class NumberSplitterTest extends KernelTestCase
         $this->assertSame([8500, 8500, 8500], $numberSplitter->splitRound(25500, 3));
         $this->assertSame([1000, 1000, 999], $numberSplitter->splitRound(2999, 3));
         $this->assertSame([999, 999, 997], $numberSplitter->splitRound(2995, 3));
+        $this->assertSame([10.0, 10.0, 9.95], $numberSplitter->splitRound(2995 / 100, 3, false));
     }
 }

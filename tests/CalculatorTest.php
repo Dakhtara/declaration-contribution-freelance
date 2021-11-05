@@ -38,7 +38,7 @@ class CalculatorTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        $calculateQuarterDeclaration = $container->get('test.' . CalculateQuarterDeclaration::class);
+        $calculateQuarterDeclaration = $container->get('test.'.CalculateQuarterDeclaration::class);
 
         $this->assertSame(30000, $calculateQuarterDeclaration->calculateForQuarter(4, 2021)->getAmount());
     }
@@ -47,11 +47,10 @@ class CalculatorTest extends KernelTestCase
     {
         $container = static::getContainer();
         /** @var CurrencyFormatter $currencyFormatter */
-        $currencyFormatter = $container->get('test.' . CurrencyFormatter::class);
+        $currencyFormatter = $container->get('test.'.CurrencyFormatter::class);
 
         $this->assertSame(25.50, $currencyFormatter->toFloat(2550));
 
-        $this->assertSame("25,50 €", trim($currencyFormatter->toCurrency(2550)));
+        $this->assertSame('25,50 €', trim($currencyFormatter->toCurrency(2550)));
     }
-
 }

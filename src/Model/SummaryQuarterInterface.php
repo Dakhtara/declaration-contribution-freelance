@@ -13,8 +13,6 @@ interface SummaryQuarterInterface
     public function getTotalDebit(): int;
 
     /**
-     * @param string $type
-     *
      * @return iterable|TransactionInterface[]
      */
     public function getTransactionByType(string $type): iterable;

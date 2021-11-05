@@ -4,13 +4,9 @@ namespace App\Util;
 
 class NumberSplitter
 {
-
     /**
      * This method should only return rounded value and not floating
-     * For input 89900 in 3 slices we should return [30000, 30000, 29900]
-     *
-     * @param float $value
-     * @param int $slices
+     * For input 89900 in 3 slices we should return [30000, 30000, 29900].
      *
      * @return array|int[]
      */
@@ -20,31 +16,31 @@ class NumberSplitter
         $lastDigit = substr($value, -1);
         $powExponent = 0;
 
-        while ($lastDigit == 0) {
+        while (0 == $lastDigit) {
             $value = $value / 10;
-            $powExponent++;
+            ++$powExponent;
             $lastDigit = substr($value, -1, 1);
         }
 
         //We keep the remaining modulo value
         $modSlices = fmod($value, $slices);
         $remaining = 0;
-        if ($modSlices != 0) {
+        if (0 != $modSlices) {
             $remaining = $slices - $modSlices;
         }
         $slice = ($value + $remaining) / $slices;
         $resValues = [];
 
         //We add each slice but not the last one.
-        for ($i = 0; $i < $slices - 1; $i++) {
+        for ($i = 0; $i < $slices - 1; ++$i) {
             $val = $slice * pow(10, $powExponent);
-            $val = $asInt ? (int)$val : $val;
+            $val = $asInt ? (int) $val : $val;
             $resValues[] = $val;
         }
 
         //We add the lase slice which is different of the first slices
         $val = ($slice - $remaining) * pow(10, $powExponent);
-        $val = $asInt ? (int)$val : $val;
+        $val = $asInt ? (int) $val : $val;
         $resValues[] = $val;
 
         return $resValues;

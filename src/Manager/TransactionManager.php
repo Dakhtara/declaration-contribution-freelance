@@ -18,27 +18,25 @@ class TransactionManager
     }
 
     /**
-     * @param int $quarter
-     * @param int $year
-     *
-     * @return array|null|Transaction[]
+     * @return array|Transaction[]|null
      */
     public function getByQuarterAndYear(int $quarter, int $year): ?array
     {
         $dates = (new QuarterDate())->getDatesByQuarterAndYear($quarter, $year);
+
         return $this->transactionRepository->getByQuarter($dates['startDate'], $dates['endDate']);
     }
 
     public function save(Transaction $transaction): Transaction
     {
-        if ($transaction->getId() === null) {
-            if ($transaction->getSlices() !== null) {
+        if (null === $transaction->getId()) {
+            if (null !== $transaction->getSlices()) {
                 $numberSplitter = new NumberSplitter();
                 $transDate = \DateTimeImmutable::createFromInterface($transaction->getDate());
 
                 $splittedNumbers = $numberSplitter->splitRound($transaction->getPrice(), $transaction->getSlices());
 
-                for ($i = 0; $i < $transaction->getSlices(); $i++) {
+                for ($i = 0; $i < $transaction->getSlices(); ++$i) {
                     $splittedTransaction = new SplittedTransaction();
                     $splittedTransaction->setIsCounted(false)
                         ->setAmount($splittedNumbers[$i])

@@ -57,11 +57,11 @@ class QuarterSummaryCommand extends Command
 
         $debitTransaction = [];
         foreach ($summary->getTransactionByType(Transaction::TYPE_DEBIT) as $transaction) {
-            if ($transaction->getSlices() === null) {
+            if (null === $transaction->getSlices()) {
                 $debitTransaction[] = [$transaction->getLabel(), $transaction->getDate()->format('d/m/Y'), $currencyFormatter->toCurrency($transaction->getPrice())];
             } else {
                 $splittedTransaction = $summary->getSplittedTransaction($transaction);
-                if ($splittedTransaction !== null) {
+                if (null !== $splittedTransaction) {
                     $splittedTransaction->setIsCounted(true);
 
                     $debitTransaction[] = [$splittedTransaction->getTransaction()->getLabel(),
@@ -79,9 +79,9 @@ class QuarterSummaryCommand extends Command
 
         $io->writeln("Total de débit {$currencyFormatter->toCurrency($summary->getTotalDebit())}");
 
-
         $io->success("A déclarer pour ce trimestre {$currencyFormatter->toCurrency($summary->getAmount())}");
         $this->entityManager->flush();
+
         return Command::SUCCESS;
     }
 }

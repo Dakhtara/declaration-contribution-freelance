@@ -2,13 +2,12 @@
 
 namespace App\Model;
 
-
 use Doctrine\Common\Collections\Collection;
 
 interface TransactionInterface
 {
     /**
-     * Must be of type credit/debit
+     * Must be of type credit/debit.
      */
     public function getType(): string;
 

@@ -19,6 +19,7 @@ class SummaryQuarterFormatter
             }
         }
         $currencyFormatter = new CurrencyFormatter();
-        return sprintf("%s (%s restant à déclarer)", $currencyFormatter->toCurrency($currentPrice), $currencyFormatter->toCurrency($remainingPrice));
+
+        return sprintf('%s (%s restant à déclarer)', $currencyFormatter->toCurrency($currentPrice), $currencyFormatter->toCurrency($remainingPrice));
     }
 }

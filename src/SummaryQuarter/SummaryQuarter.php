@@ -55,11 +55,11 @@ class SummaryQuarter implements SummaryQuarterInterface
     {
         $debit = 0;
         foreach ($this->getTransactionByType(Transaction::TYPE_DEBIT) as $transaction) {
-            if ($transaction->getSlices() === null) {
+            if (null === $transaction->getSlices()) {
                 $debit += $transaction->getPrice();
             } else {
                 $splittedTransaction = $this->getSplittedTransaction($transaction);
-                if ($splittedTransaction === null) {
+                if (null === $splittedTransaction) {
                     throw new \Exception("A transaction exist with slices but no splitted transactions exist. There must be an error on transaction #{$transaction->getId()}");
                 }
 
@@ -74,7 +74,7 @@ class SummaryQuarter implements SummaryQuarterInterface
     {
         $dates = (new QuarterDate())->getDatesByQuarterAndYear($this->quarter, $this->year);
 
-        if ($transaction->getSlices() === null || count($transaction->getSplittedTransaction()) === 0) {
+        if (null === $transaction->getSlices() || 0 === count($transaction->getSplittedTransaction())) {
             return null;
         }
 

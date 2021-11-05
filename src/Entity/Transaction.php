@@ -17,8 +17,8 @@ use Doctrine\ORM\Mapping\Table;
 #[Table(name: 'app_transaction')]
 class Transaction implements TransactionInterface
 {
-    const TYPE_CREDIT = 'credit';
-    const TYPE_DEBIT = 'debit';
+    public const TYPE_CREDIT = 'credit';
+    public const TYPE_DEBIT = 'debit';
 
     #[Id]
     #[Column(name: 'id', type: 'integer')]
@@ -122,17 +122,12 @@ class Transaction implements TransactionInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLabel(): string
     {
         return $this->label;
     }
 
     /**
-     * @param string $label
-     *
      * @return $this
      */
     public function setLabel(string $label): self

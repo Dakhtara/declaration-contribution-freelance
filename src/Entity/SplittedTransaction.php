@@ -24,7 +24,7 @@ class SplittedTransaction implements SplittedTransactionInterface
     #[Column(name: 'date', type: 'datetime')]
     private \DateTimeInterface $date;
 
-    #[Column(name:'amount', type: 'integer')]
+    #[Column(name: 'amount', type: 'integer')]
     private int $amount;
 
     #[ManyToOne(targetEntity: Transaction::class, inversedBy: 'splittedTransaction')]

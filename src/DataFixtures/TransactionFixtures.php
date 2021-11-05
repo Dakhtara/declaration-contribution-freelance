@@ -46,7 +46,7 @@ class TransactionFixtures extends Fixture
                 ->setSlices($transaction['slices']);
 
             $manager->persist($entityTransaction);
-            $this->setReference('tr-' . $transaction['id'], $entityTransaction);
+            $this->setReference('tr-'.$transaction['id'], $entityTransaction);
         }
 
         $manager->flush();

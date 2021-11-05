@@ -14,7 +14,7 @@ class TransactionManagerTest extends KernelTestCase
         $year = 2021;
 
         $container = self::getContainer();
-        $transactionManager = $container->get('test.' . TransactionManager::class);
+        $transactionManager = $container->get('test.'.TransactionManager::class);
 
         $results = $transactionManager->getByQuarterAndYear($quarter, $year);
 
@@ -25,11 +25,11 @@ class TransactionManagerTest extends KernelTestCase
     {
         $container = self::getContainer();
         /** @var TransactionManager $transactionManager */
-        $transactionManager = $container->get('test.' . TransactionManager::class);
+        $transactionManager = $container->get('test.'.TransactionManager::class);
         $transaction = new Transaction();
 
         $transaction->setType(Transaction::TYPE_CREDIT)
-            ->setLabel("Virement X")
+            ->setLabel('Virement X')
             ->setPrice(70000)
             ->setDateTime(new \DateTime());
 

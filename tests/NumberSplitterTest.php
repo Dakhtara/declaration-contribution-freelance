@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NumberSplitterTest extends KernelTestCase
 {
-
     public function testSplitter(): void
     {
         $numberSplitter = new NumberSplitter();

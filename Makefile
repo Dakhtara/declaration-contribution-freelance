@@ -14,7 +14,7 @@ test-full: ## Reset BDD and reload fixtures before test
 	$(TEST_CONSOLE) doctrine:database:create
 	$(TEST_CONSOLE) doctrine:schema:create
 	$(TEST_CONSOLE) doctrine:fixtures:load -n
-	./bin/phpunit
+	php bin/phpunit
 
 cs-fix:
 	./vendor/bin/php-cs-fixer fix

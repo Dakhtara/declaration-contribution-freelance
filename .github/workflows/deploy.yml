@@ -30,6 +30,9 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: docker compose exec php composer install --prefer-dist --no-progress
 
+      - name: Configure Test config and JWT KeyPair
+        run: docker compose exec php make configure-test
+
       - name: PHPUnit
         run: docker compose exec php make test-full
 

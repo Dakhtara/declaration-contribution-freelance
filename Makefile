@@ -9,6 +9,9 @@ reset-db: ## Reset BDD for dev env
 	$(DEV_CONSOLE) doctrine:schema:create
 	$(DEV_CONSOLE) doctrine:fixtures:load -n
 
+configure-test: ## Create keypair for test environment
+	$(TEST_CONSOLE) lexik:jwt:generate-keypair --skip-if-exists
+
 test-full: ## Reset BDD and reload fixtures before test
 	$(TEST_CONSOLE) doctrine:database:drop --force --if-exists
 	$(TEST_CONSOLE) doctrine:database:create

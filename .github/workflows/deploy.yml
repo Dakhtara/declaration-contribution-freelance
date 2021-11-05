@@ -24,14 +24,14 @@ jobs:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+            ${{ runner.os }}-php-
 
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: docker compose exec php composer install --prefer-dist --no-progress
+        run: docker-compose exec php composer install --prefer-dist --no-progress
 
       - name: PHPUnit
-        run: docker compose exec php make test-full
+        run: docker-compose exec php make test-full
 
       - name: Stop containers
         if: always()

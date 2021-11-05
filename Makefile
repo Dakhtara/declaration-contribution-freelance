@@ -1,9 +1,7 @@
 .DEFAULT_GOAL := help
 
-
-
-TEST_CONSOLE = php bin/console --env=test
 DEV_CONSOLE = php bin/console
+TEST_CONSOLE = $(DEV_CONSOLE) --env=test
 
 reset-db: ## Reset BDD for dev env
 	$(DEV_CONSOLE) doctrine:database:drop --force
@@ -21,7 +19,7 @@ test-full: ## Reset BDD and reload fixtures before test
 cs-fix:
 	./vendor/bin/php-cs-fixer fix
 test: ## Just run the tests
-	bin/phpunit -c phpunit.xml.dist
+	bin/phpunit
 
 git-hooks: ## Configure git-hooks
 	- git config core.hooksPath etc/git-hooks

@@ -55,9 +55,11 @@ class AddTransactionCommand extends Command
         //If it's a debit with amount > 500€
         if ($type === Transaction::TYPE_DEBIT && $price >= 50000) {
             $io->writeln("Votre transaction est un débit avec un montant supérieur a 500€ il faut préciser en combien de fois vous devez les déclarer.");
-            $sliceQuestion = new Question("Combien de partis faut-il découper pour ce montant ?", 3);
+            $sliceQuestion = new Question("Combien de partis faut-il découper pour ce montant ? (0 si pas de découpage a faire)", 3);
             $slices = $questionHelper->ask($input, $output, $sliceQuestion);
-            $transaction->setSlices($slices);
+            if ($slices > 0) {
+                $transaction->setSlices($slices);
+            }
         }
 
         $this->transactionManager->save($transaction);

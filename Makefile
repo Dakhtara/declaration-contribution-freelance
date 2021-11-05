@@ -4,13 +4,13 @@ DEV_CONSOLE = php bin/console
 TEST_CONSOLE = $(DEV_CONSOLE) --env=test
 
 reset-db: ## Reset BDD for dev env
-	$(DEV_CONSOLE) doctrine:database:drop --force
+	$(DEV_CONSOLE) doctrine:database:drop --force --if-exists
 	$(DEV_CONSOLE) doctrine:database:create
 	$(DEV_CONSOLE) doctrine:schema:create
 	$(DEV_CONSOLE) doctrine:fixtures:load -n
 
 test-full: ## Reset BDD and reload fixtures before test
-	$(TEST_CONSOLE) doctrine:database:drop --force
+	$(TEST_CONSOLE) doctrine:database:drop --force --if-exists
 	$(TEST_CONSOLE) doctrine:database:create
 	$(TEST_CONSOLE) doctrine:schema:create
 	$(TEST_CONSOLE) doctrine:fixtures:load -n

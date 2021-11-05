@@ -21,7 +21,7 @@ test-full: ## Reset BDD and reload fixtures before test
 cs-fix:
 	./vendor/bin/php-cs-fixer fix
 test: ## Just run the tests
-	bin/phpunit
+	bin/phpunit -c phpunit.xml.dist
 
 git-hooks: ## Configure git-hooks
 	- git config core.hooksPath etc/git-hooks

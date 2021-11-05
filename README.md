@@ -4,22 +4,32 @@
 
 You need at least :
 
-- PHP 8.0
+- Docker
 - Git
-- Composer
 
 ## Installation
 
 Once you have cloned the repo, copy the .env file to .env.local and make changes to your needs
 
-Then install the dependencies :
+Build containers
 
 ```
-composer install
+docker compose build
+```
+
+Launch containers
+
+```
+docker compose up -d 
+```
+
+If you need to connect to the php container in sh :
+
+```
+docker compose exec php sh
 ```
 
 The command below reset all the dbb and load with the fixtures
-
 ```
 make reset-db
 ```

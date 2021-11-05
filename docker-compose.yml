@@ -1,7 +1,27 @@
 version: '3'
 
 services:
-###> doctrine/doctrine-bundle ###
+  php:
+    build: ./etc/docker/php
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - database
+  nginx:
+    build: ./etc/docker/nginx
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www
+      - ./etc/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./etc/docker/nginx/sites/:/etc/nginx/sites-available
+      - ./etc/docker/nginx/conf.d/:/etc/nginx/conf.d
+  ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-13}-alpine
     environment:
@@ -9,6 +29,8 @@ services:
       # You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
       POSTGRES_USER: ${POSTGRES_USER:-symfony}
+    ports:
+      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
@@ -16,6 +38,6 @@ services:
 ###< doctrine/doctrine-bundle ###
 
 volumes:
-###> doctrine/doctrine-bundle ###
+  ###> doctrine/doctrine-bundle ###
   db-data:
 ###< doctrine/doctrine-bundle ###

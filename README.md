@@ -23,6 +23,12 @@ Launch containers
 docker compose up -d 
 ```
 
+Create some keypair for the jwt bundle
+```
+php bin/console lexik:jwt:generate-keypair
+```
+
+
 If you need to connect to the php container in sh :
 
 ```

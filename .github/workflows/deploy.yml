@@ -28,10 +28,10 @@ jobs:
 
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: docker compose exec php composer install --prefer-dist --no-progress
 
       - name: PHPUnit
-        run: make test-full
+        run: docker compose exec php make test-full
 
       - name: Stop containers
         if: always()

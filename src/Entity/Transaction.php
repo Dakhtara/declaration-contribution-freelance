@@ -11,7 +11,9 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[Entity]
 #[Table(name: 'app_transaction')]
@@ -23,28 +25,36 @@ class Transaction implements TransactionInterface
     #[Id]
     #[Column(name: 'id', type: 'integer')]
     #[GeneratedValue]
+    #[Groups('read:transaction')]
     private $id;
 
     #[Column(name: 'type', type: 'string', length: 30)]
+    #[Groups('read:transaction')]
     private string $type;
 
     #[Column(name: 'label', type: 'string', length: 255)]
+    #[Groups('read:transaction')]
     private string $label;
 
     #[Column(name: 'price', type: 'integer')]
+    #[Groups('read:transaction')]
     private int $price;
 
     #[Column(name: 'datetime', type: 'datetime')]
+    #[Groups('read:transaction')]
     private \DateTimeInterface $dateTime;
 
     #[Column(name: 'slices', type: 'integer', nullable: true)]
+    #[Groups('read:transaction')]
     private ?int $slices = null;
 
     /**
      * @var Collection|SplittedTransactionInterface[]
      */
-    #[OneToMany(targetEntity: SplittedTransaction::class, mappedBy: 'transaction', orphanRemoval: true, cascade: ['persist'])]
-    private $splittedTransaction;
+    #[OneToMany(mappedBy: 'transaction', targetEntity: SplittedTransaction::class, cascade: ['persist'], orphanRemoval: true)]
+    #[OrderBy(['date' => 'ASC'])]
+    #[Groups('read:transaction')]
+    private Collection $splittedTransaction;
 
     public function __construct()
     {
@@ -67,6 +77,11 @@ class Transaction implements TransactionInterface
     }
 
     public function getDate(): \DateTimeInterface
+    {
+        return $this->dateTime;
+    }
+
+    public function getDateTime(): \DateTimeInterface
     {
         return $this->dateTime;
     }

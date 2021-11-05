@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[Entity]
 #[Table(name: 'splitted_transaction')]
@@ -19,12 +20,15 @@ class SplittedTransaction implements SplittedTransactionInterface
     #[Id]
     #[Column(name: 'id', type: 'integer')]
     #[GeneratedValue]
+    #[Groups('read:transaction')]
     private $id;
 
     #[Column(name: 'date', type: 'datetime')]
+    #[Groups('read:transaction')]
     private \DateTimeInterface $date;
 
     #[Column(name: 'amount', type: 'integer')]
+    #[Groups('read:transaction')]
     private int $amount;
 
     #[ManyToOne(targetEntity: Transaction::class, inversedBy: 'splittedTransaction')]
@@ -32,6 +36,7 @@ class SplittedTransaction implements SplittedTransactionInterface
     private TransactionInterface $transaction;
 
     #[Column(name: 'counted', type: 'boolean', nullable: true)]
+    #[Groups('read:transaction')]
     private ?bool $isCounted;
 
     public function getId(): ?int

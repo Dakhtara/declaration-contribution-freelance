@@ -20,6 +20,14 @@ class TransactionManager
     /**
      * @return array|Transaction[]|null
      */
+    public function findAll(): ?array
+    {
+        return $this->transactionRepository->findAll();
+    }
+
+    /**
+     * @return array|Transaction[]|null
+     */
     public function getByQuarterAndYear(int $quarter, int $year): ?array
     {
         $dates = (new QuarterDate())->getDatesByQuarterAndYear($quarter, $year);

@@ -34,8 +34,8 @@ jobs:
           tags: dakhtara/php:latest
           file: ./etc/docker/php/Dockerfile
           context: .
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-php
+          cache-from: type=local,src=/tmp/.buildx-cache-php
+          cache-to: type=local,dest=/tmp/.buildx-cache-php-new
 
       - name: Build Nginx
         uses: docker/build-push-action@v2
@@ -46,8 +46,8 @@ jobs:
           tags: dakhtara/nginx:latest
           file: ./etc/docker/nginx/Dockerfile
           context: .
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-nginx
+          cache-from: type=local,src=/tmp/.buildx-cache-nginx
+          cache-to: type=local,dest=/tmp/.buildx-cache-nginx-new
 
       - name: Start containers
         run: docker compose -f "docker-compose.yml" up -d --no-build
@@ -56,7 +56,7 @@ jobs:
         id: composer-cache
         uses: actions/cache@v2
         with:
-          path: vendor
+          path: ./vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
@@ -78,8 +78,8 @@ jobs:
       - name: Move cache php
         run: |
           rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-php /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-php-new /tmp/.buildx-cache-php
       - name: Move cache nginx
         run: |
           rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-nginx /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-nginx-new /tmp/.buildx-cache-nginx

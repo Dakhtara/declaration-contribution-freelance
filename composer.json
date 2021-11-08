@@ -1,4 +1,6 @@
 {
+    "name": "dakhtara/declaration-contribution-freelance",
+    "description": "A small project to handle freelance contribution declaration.",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",

@@ -57,12 +57,6 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache-nginx
           cache-to: type=local,dest=/tmp/.buildx-cache-nginx-new
 
-      - name: Start containers
-        run: docker compose -f "docker-compose.yml" up -d --no-build
-
-      - name: Validate composer.json and composer.lock
-        run: docker compose exec php composer validate
-
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v2
@@ -71,6 +65,12 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
+
+      - name: Start containers
+        run: docker compose -f "docker-compose.yml" up -d --no-build
+
+      - name: Validate composer.json and composer.lock
+        run: docker compose exec php composer validate
 
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'

@@ -10,7 +10,7 @@ class ApiLoginTest extends WebTestCase
 
     public function testLogin(): void
     {
-        $this->createAuthenticatedClient('anthony.matignon@domain.com', 'azerty');
+        $this->createAuthenticatedClient('anthony.matignon@domain.com');
         $this->assertResponseIsSuccessful();
     }
 }

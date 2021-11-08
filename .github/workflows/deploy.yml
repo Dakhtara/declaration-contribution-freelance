@@ -77,9 +77,9 @@ jobs:
 
       - name: Move cache php
         run: |
-          rm -rf /tmp/.buildx-cache
+          rm -rf /tmp/.buildx-cache-php
           mv /tmp/.buildx-cache-php-new /tmp/.buildx-cache-php
       - name: Move cache nginx
         run: |
-          rm -rf /tmp/.buildx-cache
+          rm -rf /tmp/.buildx-cache-nginx
           mv /tmp/.buildx-cache-nginx-new /tmp/.buildx-cache-nginx

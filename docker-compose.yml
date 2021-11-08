@@ -10,6 +10,7 @@ services:
       - ./:/var/www
     depends_on:
       - database
+    image: dakhtara/php
   nginx:
     build: ./etc/docker/nginx
     depends_on:

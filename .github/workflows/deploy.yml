@@ -14,14 +14,13 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@master
+        uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-step1-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
 
@@ -31,8 +30,6 @@ jobs:
           push: false
           load: true
           tags: dakhtara/php:latest
-          builder: ${{ steps.buildx.outputs.name }}
-          file: ./etc/docker/php/Dockerfile
           context: .
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
@@ -62,3 +59,8 @@ jobs:
       - name: Stop containers
         if: always()
         run: docker compose -f "docker-compose.yml" down
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache

@@ -14,7 +14,9 @@ services:
 
   ###> Nginx ###
   nginx:
-    build: ./etc/docker/nginx
+    build:
+      context: ./etc/docker/nginx
+      dockerfile: Dockerfile
     depends_on:
       - php
     ports:

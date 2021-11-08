@@ -32,6 +32,7 @@ jobs:
           push: false
           load: true
           tags: dakhtara/php:latest
+          file: ./etc/docker/php/Dockerfile
           context: .
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache

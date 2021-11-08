@@ -25,7 +25,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build
+      - name: Build php
         uses: docker/build-push-action@v2
         with:
           builder: ${{ steps.buildx.outputs.name }}
@@ -33,6 +33,18 @@ jobs:
           load: true
           tags: dakhtara/php:latest
           file: ./etc/docker/php/Dockerfile
+          context: .
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+
+      - name: Build Nginx
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          push: false
+          load: true
+          tags: dakhtara/nginx:latest
+          file: ./etc/docker/nginx/Dockerfile
           context: .
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache

@@ -60,6 +60,9 @@ jobs:
       - name: Start containers
         run: docker compose -f "docker-compose.yml" up -d --no-build
 
+      - name: Validate composer.json and composer.lock
+        run: docker compose exec php composer validate
+
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v2
@@ -78,6 +81,8 @@ jobs:
 
       - name: PHPUnit
         run: docker compose exec php make test-full
+
+      ## Once test are passed we can serve files to server
 
       - name: Stop containers
         if: always()

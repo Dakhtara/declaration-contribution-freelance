@@ -25,6 +25,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private $password;
 
+    #[ORM\ManyToMany(targetEntity: Transaction::class, cascade: ["persist", "remove"], orphanRemoval: true)]
+    #[ORM\JoinTable(name: 'user_transactions')]
+    #[ORM\JoinColumn('user_id')]
+    #[ORM\InverseJoinColumn('transaction_id', unique: true)]
+    private $transactions;
+
     public function getId(): ?int
     {
         return $this->id;

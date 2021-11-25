@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
@@ -55,6 +56,9 @@ class Transaction implements TransactionInterface
     #[OrderBy(['date' => 'ASC'])]
     #[Groups('read:transaction')]
     private Collection $splittedTransaction;
+
+    #[ManyToMany(targetEntity: User::class, mappedBy: 'transactions')]
+    private $user;
 
     public function __construct()
     {
@@ -170,5 +174,17 @@ class Transaction implements TransactionInterface
         }
 
         return $this;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
     }
 }

@@ -4,15 +4,15 @@ namespace App\Tests;
 
 use App\Entity\Transaction;
 use App\Manager\TransactionManager;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class TransactionManagerTest extends KernelTestCase
+class TransactionManagerTest extends AppWebTestCase
 {
+
     public function testEntityByQuarterAndYear()
     {
         $quarter = 4;
         $year = 2021;
-
+        $this->logInAs();
         $container = self::getContainer();
         $transactionManager = $container->get('test.'.TransactionManager::class);
 

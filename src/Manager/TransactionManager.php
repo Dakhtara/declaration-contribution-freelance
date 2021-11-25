@@ -4,17 +4,16 @@ namespace App\Manager;
 
 use App\Entity\SplittedTransaction;
 use App\Entity\Transaction;
+use App\Entity\User;
 use App\Repository\TransactionRepository;
 use App\Util\NumberSplitter;
 use App\Util\QuarterDate;
+use Symfony\Component\Security\Core\Security;
 
 class TransactionManager
 {
-    private TransactionRepository $transactionRepository;
-
-    public function __construct(TransactionRepository $transactionRepository)
+    public function __construct(private TransactionRepository $transactionRepository, private Security $security)
     {
-        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -28,11 +27,22 @@ class TransactionManager
     /**
      * @return array|Transaction[]|null
      */
-    public function getByQuarterAndYear(int $quarter, int $year): ?array
+    public function getByUser(?User $user = null): ?array
     {
+        $user = $user ?? $this->security->getUser();
+
+        return $this->transactionRepository->getByUser($user);
+    }
+
+    /**
+     * @return array|Transaction[]|null
+     */
+    public function getByQuarterAndYear(int $quarter, int $year, ?User $user = null): ?array
+    {
+        $user = $user ?? $this->security->getUser();
         $dates = (new QuarterDate())->getDatesByQuarterAndYear($quarter, $year);
 
-        return $this->transactionRepository->getByQuarter($dates['startDate'], $dates['endDate']);
+        return $this->transactionRepository->getByQuarter($dates['startDate'], $dates['endDate'], $user);
     }
 
     public function save(Transaction $transaction): Transaction

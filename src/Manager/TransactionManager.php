@@ -8,12 +8,18 @@ use App\Entity\User;
 use App\Repository\TransactionRepository;
 use App\Util\NumberSplitter;
 use App\Util\QuarterDate;
+use DateTime;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Security\Core\Security;
 
 class TransactionManager
 {
+    private QuarterDate $quarterDate;
+
+    #[Pure]
     public function __construct(private TransactionRepository $transactionRepository, private Security $security)
     {
+        $this->quarterDate = new QuarterDate();
     }
 
     /**
@@ -40,7 +46,7 @@ class TransactionManager
     public function getByQuarterAndYear(int $quarter, int $year, ?User $user = null): ?array
     {
         $user = $user ?? $this->security->getUser();
-        $dates = (new QuarterDate())->getDatesByQuarterAndYear($quarter, $year);
+        $dates = $this->quarterDate->getDatesByQuarterAndYear($quarter, $year);
 
         return $this->transactionRepository->getByQuarter($dates['startDate'], $dates['endDate'], $user);
     }
@@ -65,5 +71,10 @@ class TransactionManager
         }
 
         return $this->transactionRepository->save($transaction);
+    }
+
+    public function getByUserAndTrimester(User $user, DateTime $date)
+    {
+        return $this->getByQuarterAndYear($this->quarterDate->getQuarter($date), $date->format('Y'), $user);
     }
 }

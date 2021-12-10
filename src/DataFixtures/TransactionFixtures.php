@@ -43,6 +43,22 @@ class TransactionFixtures extends Fixture
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '25/11/2021 09:19:00'),
                 'slices' => null,
             ],
+            [
+                'id' => 5,
+                'label' => 'Virement IDCity',
+                'type' => Transaction::TYPE_CREDIT,
+                'price' => 60000,
+                'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '28/08/2021 09:19:00'),
+                'slices' => null,
+            ],
+            [
+                'id' => 6,
+                'label' => 'Billet de train',
+                'type' => Transaction::TYPE_DEBIT,
+                'price' => 1400,
+                'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '12/07/2021 09:19:00'),
+                'slices' => null,
+            ],
         ];
 
         foreach ($transactions as $transaction) {

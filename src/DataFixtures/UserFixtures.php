@@ -21,7 +21,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
                 'email' => 'anthony.matignon@domain.com',
                 'roles' => ['ROLE_USER'],
                 'password' => 'azerty',
-                'transactions' => ['tr-1', 'tr-2', 'tr-3'],
+                'transactions' => ['tr-1', 'tr-2', 'tr-3', 'tr-5', 'tr-6'],
             ],
             [
                 'email' => 'admin@domain.com',

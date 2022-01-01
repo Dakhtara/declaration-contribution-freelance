@@ -4,10 +4,12 @@ namespace App\Command;
 
 use App\Entity\Transaction;
 use App\Manager\TransactionManager;
+use App\Manager\UserManager;
 use App\Util\CurrencyFormatter;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
@@ -17,14 +19,27 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'app:transaction:add', description: 'Add a transaction')]
 class AddTransactionCommand extends Command
 {
-    public function __construct(private TransactionManager $transactionManager)
+    public function __construct(private TransactionManager $transactionManager, private UserManager $userManager)
     {
         parent::__construct();
+    }
+
+    protected function configure()
+    {
+        $this->addArgument('user', InputArgument::REQUIRED, "L'utilisateur (email) a qui on rajoute la transaction");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+
+        $userEmail = $input->getArgument('user');
+        $user = $this->userManager->getUserByEmail($userEmail);
+
+        if (!$user) {
+            $io->error(sprintf("No user found with email %s", $userEmail));
+            return Command::FAILURE;
+        }
 
         $labelQuestion = new Question('Quelle est le libellé de votre transaction ?');
         $typeQuestion = new ChoiceQuestion('Quelle est le type de votre transaction ?', [Transaction::TYPE_DEBIT, Transaction::TYPE_CREDIT]);
@@ -50,6 +65,8 @@ class AddTransactionCommand extends Command
             ->setDateTime($date)
             ->setPrice($price)
             ->setType($type);
+
+        $user->addTransaction($transaction);
 
         //If it's a debit with amount > 500€
         if (Transaction::TYPE_DEBIT === $type && $price >= 50000) {

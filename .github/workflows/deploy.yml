@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      ###> Docker setup ###
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
@@ -56,6 +57,7 @@ jobs:
           context: .
           cache-from: type=local,src=/tmp/.buildx-cache-nginx
           cache-to: type=local,dest=/tmp/.buildx-cache-nginx-new
+      ###< Docker setup ###
 
       - name: Cache Composer packages
         id: composer-cache
@@ -69,18 +71,22 @@ jobs:
       - name: Start containers
         run: docker compose -f "docker-compose.yml" up -d --no-build
 
+      ###> Composer validation and install ###
       - name: Validate composer.json and composer.lock
         run: docker compose exec php composer validate
 
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: docker compose exec php composer install --prefer-dist --no-progress
+      ###< Composer ###
 
+      ###> Configure and run test ###
       - name: Configure Test config and JWT KeyPair
         run: docker compose exec php make configure-test
 
       - name: PHPUnit
         run: docker compose exec php make test-full
+      ###< Configure and run test ###
 
       ## Once test are passed we can serve files to server
 

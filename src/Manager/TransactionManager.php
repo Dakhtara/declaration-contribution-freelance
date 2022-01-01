@@ -4,17 +4,22 @@ namespace App\Manager;
 
 use App\Entity\SplittedTransaction;
 use App\Entity\Transaction;
+use App\Entity\User;
 use App\Repository\TransactionRepository;
 use App\Util\NumberSplitter;
 use App\Util\QuarterDate;
+use DateTime;
+use JetBrains\PhpStorm\Pure;
+use Symfony\Component\Security\Core\Security;
 
 class TransactionManager
 {
-    private TransactionRepository $transactionRepository;
+    private QuarterDate $quarterDate;
 
-    public function __construct(TransactionRepository $transactionRepository)
+    #[Pure]
+    public function __construct(private TransactionRepository $transactionRepository, private Security $security)
     {
-        $this->transactionRepository = $transactionRepository;
+        $this->quarterDate = new QuarterDate();
     }
 
     /**
@@ -28,11 +33,22 @@ class TransactionManager
     /**
      * @return array|Transaction[]|null
      */
-    public function getByQuarterAndYear(int $quarter, int $year): ?array
+    public function getByUser(?User $user = null): ?array
     {
-        $dates = (new QuarterDate())->getDatesByQuarterAndYear($quarter, $year);
+        $user = $user ?? $this->security->getUser();
 
-        return $this->transactionRepository->getByQuarter($dates['startDate'], $dates['endDate']);
+        return $this->transactionRepository->getByUser($user);
+    }
+
+    /**
+     * @return array|Transaction[]|null
+     */
+    public function getByQuarterAndYear(int $quarter, int $year, ?User $user = null): ?array
+    {
+        $user = $user ?? $this->security->getUser();
+        $dates = $this->quarterDate->getDatesByQuarterAndYear($quarter, $year);
+
+        return $this->transactionRepository->getByQuarter($dates['startDate'], $dates['endDate'], $user);
     }
 
     public function save(Transaction $transaction): Transaction
@@ -55,5 +71,10 @@ class TransactionManager
         }
 
         return $this->transactionRepository->save($transaction);
+    }
+
+    public function getByUserAndTrimester(User $user, DateTime $date)
+    {
+        return $this->getByQuarterAndYear($this->quarterDate->getQuarter($date), $date->format('Y'), $user);
     }
 }

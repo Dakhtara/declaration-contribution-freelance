@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Transaction;
+use App\Manager\UserManager;
 use App\Service\CalculateQuarterDeclaration;
 use App\SummaryQuarter\SummaryQuarterFormatter;
 use App\Util\CurrencyFormatter;
@@ -20,7 +21,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class QuarterSummaryCommand extends Command
 {
-    public function __construct(private CalculateQuarterDeclaration $calculateQuarterDeclaration, private EntityManagerInterface $entityManager)
+    public function __construct(private CalculateQuarterDeclaration $calculateQuarterDeclaration,
+                                private EntityManagerInterface $entityManager,
+                                private UserManager $userManager
+    )
     {
         parent::__construct();
     }
@@ -29,7 +33,8 @@ class QuarterSummaryCommand extends Command
     {
         $this
             ->addArgument('quarter', InputArgument::REQUIRED, 'Quarter of the year, must be an integer 1, 2, 3 or 4')
-            ->addArgument('year', InputArgument::REQUIRED, 'Year of the quarter');
+            ->addArgument('year', InputArgument::REQUIRED, 'Year of the quarter')
+            ->addArgument('user', InputArgument::REQUIRED, 'User (email) to get data from');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -38,9 +43,17 @@ class QuarterSummaryCommand extends Command
 
         $quarter = $input->getArgument('quarter');
         $year = $input->getArgument('year');
+        $userInput = $input->getArgument('user');
+
+        $user = $this->userManager->getUserByEmail($userInput);
+
+        if (!$user) {
+            $io->error(sprintf('No user found with email %s', $user));
+            return Command::FAILURE;
+        }
 
         // We need to fetch transactions and split transaction for the Quarter and year
-        $summary = $this->calculateQuarterDeclaration->calculateForQuarter($quarter, $year);
+        $summary = $this->calculateQuarterDeclaration->calculateForQuarter($quarter, $year, $user);
         $currencyFormatter = new CurrencyFormatter();
 
         $creditTransaction = [];

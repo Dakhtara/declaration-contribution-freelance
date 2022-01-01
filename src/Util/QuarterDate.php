@@ -77,4 +77,22 @@ class QuarterDate
 
         return null;
     }
+
+    public function getQuarter(\DateTimeInterface $dateTime): int
+    {
+        $month = $dateTime->format('n');
+        if ($month > 12 || $month < 1) {
+            throw new \Exception(sprintf("You can't find a quarter for month %s as this month doesn't exist in the calendar", $month));
+        }
+
+        if ($month <= 3) {
+            return 1;
+        } elseif ($month <= 6) {
+            return 2;
+        } elseif ($month <= 9) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
 }

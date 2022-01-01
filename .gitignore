@@ -1,7 +1,7 @@
 ###> custom ###
 .idea
 .env
-.deploy.php
+deploy.php
 ###> custom ###
 
 

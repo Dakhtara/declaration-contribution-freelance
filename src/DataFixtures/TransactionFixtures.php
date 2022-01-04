@@ -18,6 +18,7 @@ class TransactionFixtures extends Fixture
                 'price' => 20000,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '28/10/2021 13:39:00'),
                 'slices' => null,
+                'billedAt' => \DateTime::createFromFormat('d/m/Y H:i:s', '24/06/2021 12:59:00')
             ],
             [
                 'id' => 2,
@@ -26,6 +27,7 @@ class TransactionFixtures extends Fixture
                 'price' => 70000,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '27/10/2021 14:50:00'),
                 'slices' => null,
+                'billedAt' => null
             ],
             [
                 'id' => 3,
@@ -34,6 +36,7 @@ class TransactionFixtures extends Fixture
                 'price' => 60000,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '28/10/2021 10:25:00'),
                 'slices' => 3,
+                'billedAt' => \DateTime::createFromFormat('d/m/Y H:i:s', '24/06/2021 12:59:00')
             ],
             [
                 'id' => 4,
@@ -42,6 +45,7 @@ class TransactionFixtures extends Fixture
                 'price' => 1250,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '25/11/2021 09:19:00'),
                 'slices' => null,
+                'billedAt' => \DateTime::createFromFormat('d/m/Y H:i:s', '27/08/2021 12:59:00')
             ],
             [
                 'id' => 5,
@@ -50,6 +54,7 @@ class TransactionFixtures extends Fixture
                 'price' => 60000,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '28/08/2021 09:19:00'),
                 'slices' => null,
+                'billedAt' => null,
             ],
             [
                 'id' => 6,
@@ -58,6 +63,7 @@ class TransactionFixtures extends Fixture
                 'price' => 1400,
                 'datetime' => \DateTime::createFromFormat('d/m/Y H:i:s', '12/07/2021 09:19:00'),
                 'slices' => null,
+                'billedAt' => \DateTime::createFromFormat('d/m/Y H:i:s', '12/07/2021 09:19:00')
             ],
         ];
 
@@ -67,7 +73,9 @@ class TransactionFixtures extends Fixture
                 ->setLabel($transaction['label'])
                 ->setPrice($transaction['price'])
                 ->setDateTime($transaction['datetime'])
-                ->setSlices($transaction['slices']);
+                ->setSlices($transaction['slices'])
+                ->setBilledAt($transaction['billedAt'])
+            ;
 
             $manager->persist($entityTransaction);
             $this->setReference('tr-' . $transaction['id'], $entityTransaction);

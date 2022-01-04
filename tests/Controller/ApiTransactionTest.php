@@ -72,6 +72,7 @@ class ApiTransactionTest extends WebTestCase
         $this->assertArrayHasKey('dateTime', $content[0]);
         $this->assertArrayHasKey('slices', $content[0]);
         $this->assertArrayHasKey('splittedTransaction', $content[0]);
+        $this->assertArrayHasKey('billedAt', $content[0]);
 
         $this->assertIsString($content[0]['type']);
         $this->assertIsString($content[0]['label']);

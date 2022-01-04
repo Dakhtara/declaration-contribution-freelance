@@ -60,6 +60,10 @@ class Transaction implements TransactionInterface
     #[ManyToMany(targetEntity: User::class, mappedBy: 'transactions')]
     private $user;
 
+    #[Column(name: 'billed_at', type: 'datetime', nullable: true)]
+    #[Groups('read:transaction')]
+    private ?\DateTimeInterface $billedAt = null;
+
     public function __construct()
     {
         $this->splittedTransaction = new ArrayCollection();
@@ -146,9 +150,6 @@ class Transaction implements TransactionInterface
         return $this->label;
     }
 
-    /**
-     * @return $this
-     */
     public function setLabel(string $label): self
     {
         $this->label = $label;
@@ -186,5 +187,17 @@ class Transaction implements TransactionInterface
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    public function getBilledAt(): ?\DateTimeInterface
+    {
+        return $this->billedAt;
+    }
+
+    public function setBilledAt(?\DateTimeInterface $billedAt): self
+    {
+        $this->billedAt = $billedAt;
+
+        return $this;
     }
 }

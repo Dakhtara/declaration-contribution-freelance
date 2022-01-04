@@ -22,18 +22,21 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
                 'roles' => ['ROLE_USER'],
                 'password' => 'azerty',
                 'transactions' => ['tr-1', 'tr-2', 'tr-3', 'tr-5', 'tr-6'],
+                'emailSummary' => true,
             ],
             [
                 'email' => 'admin@domain.com',
                 'roles' => ['ROLE_ADMIN'],
                 'password' => 'azerty',
                 'transactions' => [],
+                'emailSummary' => false,
             ],
             [
                 'email' => 'other.user@domain.com',
                 'roles' => ['ROLE_USER'],
                 'password' => 'azerty',
                 'transactions' => ['tr-4'],
+                'emailSummary' => false,
             ],
         ];
 
@@ -42,7 +45,9 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
             $userEntity->setEmail($user['email'])
                 ->setRoles($user['roles'])
-                ->setPassword($this->hasher->hashPassword($userEntity, $user['password']));
+                ->setPassword($this->hasher->hashPassword($userEntity, $user['password']))
+                ->setEmailSummary($user['emailSummary'])
+            ;
 
             if (!empty($user['transactions'])) {
                 foreach ($user['transactions'] as $transactionRef) {

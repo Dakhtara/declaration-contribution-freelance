@@ -10,6 +10,7 @@ services:
       - ./:/var/www
     depends_on:
       - database
+      - mailer
     image: dakhtara/php:latest
 
   ###> Nginx ###

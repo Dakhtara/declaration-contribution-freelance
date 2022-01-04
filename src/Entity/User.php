@@ -33,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\InverseJoinColumn('transaction_id', unique: true)]
     private $transactions;
 
+    #[ORM\Column(name: 'email_summary', type: 'boolean')]
+    private bool $emailSummary = false;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
@@ -146,6 +149,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->transactions->contains($transaction)) {
             $this->transactions->removeElement($transaction);
         }
+
+        return $this;
+    }
+
+    public function isEmailSummary(): bool
+    {
+        return $this->emailSummary;
+    }
+
+    public function setEmailSummary(bool $emailSummary): self
+    {
+        $this->emailSummary = $emailSummary;
 
         return $this;
     }

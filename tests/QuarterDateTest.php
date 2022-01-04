@@ -12,32 +12,32 @@ class QuarterDateTest extends KernelTestCase
         $container = static::getContainer();
 
         /** @var QuarterDate $quarterDate */
-        $quarterDate = $container->get('test.'.QuarterDate::class);
+        $quarterDate = $container->get('test.' . QuarterDate::class);
 
         $asserts = [
             [
                 'quarter' => 1,
                 'year' => 2021,
                 'results' => ['startDate' => '01/01/2021 00:00:00',
-                    'endDate' => '31/03/2021 23:59:59', ],
+                    'endDate' => '31/03/2021 23:59:59',],
             ],
             [
                 'quarter' => 2,
                 'year' => 2021,
                 'results' => ['startDate' => '01/04/2021 00:00:00',
-                    'endDate' => '30/06/2021 23:59:59', ],
+                    'endDate' => '30/06/2021 23:59:59',],
             ],
             [
                 'quarter' => 3,
                 'year' => 2021,
                 'results' => ['startDate' => '01/07/2021 00:00:00',
-                    'endDate' => '30/09/2021 23:59:59', ],
+                    'endDate' => '30/09/2021 23:59:59',],
             ],
             [
                 'quarter' => 4,
                 'year' => 2021,
                 'results' => ['startDate' => '01/10/2021 00:00:00',
-                    'endDate' => '31/12/2021 23:59:59', ],
+                    'endDate' => '31/12/2021 23:59:59',],
             ],
             [
                 'quarter' => 5,
@@ -62,7 +62,7 @@ class QuarterDateTest extends KernelTestCase
         $container = static::getContainer();
 
         /** @var QuarterDate $quarterDate */
-        $quarterDate = $container->get('test.'.QuarterDate::class);
+        $quarterDate = $container->get('test.' . QuarterDate::class);
 
         $tests = [
             [
@@ -92,7 +92,47 @@ class QuarterDateTest extends KernelTestCase
         }
     }
 
-    private function quarterDate(array $test, QuarterDate $quarterDate)
+    public function testPreviousQuarter(): void
+    {
+        $dates = [
+            [
+                'date' => \DateTime::createFromFormat('d/m/Y', '01/01/2022'),
+                'expected' => ['year' => 2021, 'quarter' => 4]
+            ],
+            [
+                'date' => \DateTime::createFromFormat('d/m/Y', '01/04/2022'),
+                'expected' => ['year' => 2022, 'quarter' => 1]
+            ],
+            [
+                'date' => \DateTime::createFromFormat('d/m/Y', '01/07/2022'),
+                'expected' => ['year' => 2022, 'quarter' => 2]
+            ],
+            [
+                'date' => \DateTime::createFromFormat('d/m/Y', '01/10/2022'),
+                'expected' => ['year' => 2022, 'quarter' => 3]
+            ],
+            [
+                'date' => \DateTime::createFromFormat('d/m/Y', '30/12/2022'),
+                'expected' => ['year' => 2022, 'quarter' => 3]
+            ],
+            [
+                'date' => \DateTime::createFromFormat('d/m/Y', '03/01/2023'),
+                'expected' => ['year' => 2022, 'quarter' => 4]
+            ],
+        ];
+
+        $container = static::getContainer();
+
+        /** @var QuarterDate $quarterDate */
+        $quarterDate = $container->get('test.' . QuarterDate::class);
+
+
+        foreach ($dates as $date) {
+            $this->assertSame($date['expected'], $quarterDate->getPreviousQuarter($date['date']));
+        }
+    }
+
+    private function quarterDate(array $test, QuarterDate $quarterDate): void
     {
         $firstDay = $quarterDate->getFirstDayOfQuarter($test['date']);
         $this->assertInstanceOf(\DateTimeInterface::class, $firstDay);

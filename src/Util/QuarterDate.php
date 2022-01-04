@@ -2,6 +2,8 @@
 
 namespace App\Util;
 
+use JetBrains\PhpStorm\ArrayShape;
+
 class QuarterDate
 {
     /**
@@ -94,5 +96,15 @@ class QuarterDate
         } else {
             return 4;
         }
+    }
+
+    #[ArrayShape(['year' => 'int', 'quarter', 'int'])]
+    public function getPreviousQuarter(\DateTime $dateTime): array
+    {
+        $prevQuarter = $dateTime->modify('-3 month');
+        $quarter = $this->getQuarter($prevQuarter);
+        $year = (int) $prevQuarter->format('Y');
+
+        return compact('year', 'quarter');
     }
 }
